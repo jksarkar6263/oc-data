@@ -1,0 +1,11 @@
+{
+  "name": "trendlyne-option-collector",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "collect": "node collector.js"
+  },
+  "dependencies": {
+    "playwright": "^1.55.0"
+  }
+}
