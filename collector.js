@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const url =
-"https://www.tick2trade.com/option-chain/nifty";
+"https://smartoptions.trendlyne.com/phoenix/api/fno/option/chain/?expDate=04-08-2026&format=json&stockCode=nifty";
 
 const browser = await chromium.launch({
     headless: true
