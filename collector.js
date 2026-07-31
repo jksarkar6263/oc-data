@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const url =
-"https://smartoptions.trendlyne.com/options/latest/1887/NIFTY/nifty-50/";
+"https://www.tick2trade.com/option-chain/nifty";
 
 const browser = await chromium.launch({
     headless: true
