@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const url =
-"https://smartoptions.trendlyne.com/phoenix/api/fno/option/chain/?expDate=2026-08-04&format=json&stockCode=NIFTY";
+"https://smartoptions.trendlyne.com/options/latest/1887/NIFTY/nifty-50/";
 
 const browser = await chromium.launch({
     headless: true
