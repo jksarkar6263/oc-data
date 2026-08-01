@@ -1,5 +1,5 @@
 {
-  "name": "trendlyne-option-collector",
+  "name": "option-greeks-collector",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
