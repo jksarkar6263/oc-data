@@ -1,24 +1,35 @@
-import { chromium } from "playwright";
+import puppeteer from "puppeteer";
 
-const url =
-"https://www.tick2trade.com/option-chain/${sym}";
+const symbols = ["nifty", "banknifty", "sensex", "reliance", "tcs"]; // extend to all F&O
 
-const browser = await chromium.launch({
-    headless: true
-});
+async function scrapeAll() {
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
 
-const page = await browser.newPage();
+  const results = {};
 
-const response = await page.goto(url, {
-    waitUntil: "domcontentloaded"
-});
+  for (const sym of symbols) {
+    const url = `https://www.tick2trade.com/option-chain/${sym}`;
+    await page.goto(url, { waitUntil: "networkidle2" });
 
-console.log("Status:", response.status());
-console.log("Content-Type:", response.headers()["content-type"]);
+    const data = await page.evaluate(() => {
+      const rows = Array.from(document.querySelectorAll("table tbody tr"));
+      return rows.map(row => {
+        const cells = row.querySelectorAll("td");
+        return {
+          strike: cells[0]?.innerText.trim(),
+          callOI: cells[1]?.innerText.trim(),
+          putOI: cells[2]?.innerText.trim(),
+          // add more columns as needed
+        };
+      });
+    });
 
-const text = await page.textContent("body");
+    results[sym] = data;
+  }
 
-console.log("First 1000 chars:");
-console.log(text.substring(0,1000));
+  console.log(JSON.stringify(results, null, 2));
+  await browser.close();
+}
 
-await browser.close();
+scrapeAll();
