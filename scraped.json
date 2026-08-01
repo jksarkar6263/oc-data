@@ -1,0 +1,206 @@
+{
+  "sensex": [
+    {
+      "strike": "1.26L",
+      "callOI": "+40",
+      "putOI": "2.8K"
+    },
+    {
+      "strike": "7.16L",
+      "callOI": "+26.8K",
+      "putOI": "1.05L"
+    },
+    {
+      "strike": "67.4K",
+      "callOI": "-520",
+      "putOI": "21.5K"
+    },
+    {
+      "strike": "61.8K",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "66.5K",
+      "callOI": "+3.0K",
+      "putOI": "12.6K"
+    },
+    {
+      "strike": "33.9K",
+      "callOI": "+260",
+      "putOI": "2.1K"
+    },
+    {
+      "strike": "4.39L",
+      "callOI": "+10.6K",
+      "putOI": "43.5K"
+    },
+    {
+      "strike": "45.9K",
+      "callOI": "+320",
+      "putOI": "3.2K"
+    },
+    {
+      "strike": "32.3K",
+      "callOI": "+40",
+      "putOI": "220"
+    },
+    {
+      "strike": "80.3K",
+      "callOI": "+2.9K",
+      "putOI": "14.0K"
+    },
+    {
+      "strike": "70.9K",
+      "callOI": "+2.1K",
+      "putOI": "8.6K"
+    },
+    {
+      "strike": "4.39L",
+      "callOI": "+6.3K",
+      "putOI": "65.3K"
+    },
+    {
+      "strike": "52.2K",
+      "callOI": "+320",
+      "putOI": "1.3K"
+    },
+    {
+      "strike": "31.3K",
+      "callOI": "+5.6K",
+      "putOI": "36.3K"
+    },
+    {
+      "strike": "46.7K",
+      "callOI": "+3.2K",
+      "putOI": "26.4K"
+    },
+    {
+      "strike": "17.6K",
+      "callOI": "+2.4K",
+      "putOI": "6.8K"
+    },
+    {
+      "strike": "3.19L",
+      "callOI": "+4.5K",
+      "putOI": "54.0K"
+    },
+    {
+      "strike": "18.2K",
+      "callOI": "+2.9K",
+      "putOI": "11.7K"
+    },
+    {
+      "strike": "15.5K",
+      "callOI": "+2.8K",
+      "putOI": "7.9K"
+    },
+    {
+      "strike": "13.7K",
+      "callOI": "+3.7K",
+      "putOI": "33.3K"
+    }
+  ],
+  "nifty": [
+    {
+      "strike": "22.31L",
+      "callOI": "+8.8K",
+      "putOI": "46.6K"
+    },
+    {
+      "strike": "2.48L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "12.54L",
+      "callOI": "+2.5K",
+      "putOI": "7.7K"
+    },
+    {
+      "strike": "5.59L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "33.36L",
+      "callOI": "-650",
+      "putOI": "5.3K"
+    },
+    {
+      "strike": "17.01L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "50.01L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "39.92L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "83.41L",
+      "callOI": "+12.7K",
+      "putOI": "26.5K"
+    },
+    {
+      "strike": "44.91L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "90.80L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "32.00L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "120.35L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "52.45L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "91.97L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "38.98L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "68.30L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "21.94L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "37.70L",
+      "callOI": "+0",
+      "putOI": "0"
+    },
+    {
+      "strike": "13.85L",
+      "callOI": "+0",
+      "putOI": "0"
+    }
+  ]
+}
