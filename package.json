@@ -1,11 +1,13 @@
 {
-  "name": "option-greeks-collector",
+  "name": "tick2trade-scraper",
   "version": "1.0.0",
+  "description": "Scraper for Tick2Trade option chain data using Puppeteer",
+  "main": "scrape.js",
   "type": "module",
   "scripts": {
-    "collect": "node collector.js"
+    "start": "node scrape.js"
   },
   "dependencies": {
-    "playwright": "^1.55.0"
+    "puppeteer": "^22.0.0"
   }
 }
