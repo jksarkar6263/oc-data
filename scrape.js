@@ -2,7 +2,10 @@ import puppeteer from "puppeteer";
 import fs from "fs";
 
 async function scrapeTick2Trade(symbol) {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+  });
   const page = await browser.newPage();
 
   const url = `https://www.tick2trade.com/option-chain/${symbol}`;
@@ -21,12 +24,11 @@ async function scrapeTick2Trade(symbol) {
   });
 
   await browser.close();
-
   return data;
 }
 
 async function main() {
-  const symbols = ["sensex", "nifty"]; // extend this list
+  const symbols = ["sensex", "nifty"];
   const results = {};
 
   for (const sym of symbols) {
