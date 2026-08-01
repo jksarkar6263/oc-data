@@ -1,8 +1,6 @@
 {
   "name": "tick2trade-scraper",
   "version": "1.0.0",
-  "description": "Scraper for Tick2Trade option chain data using Puppeteer",
-  "main": "scrape.js",
   "type": "module",
   "scripts": {
     "start": "node scrape.js"
