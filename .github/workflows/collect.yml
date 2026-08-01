@@ -1,46 +1,17 @@
-name: Collect Option Chain Greek Data
-
+name: Scrape Tick2Trade
 
 on:
-
-  workflow_dispatch:
-
+  schedule:
+    - cron: "0 6 * * *"   # every day at 6 AM UTC
+  workflow_dispatch:       # allow manual trigger
 
 jobs:
-
-  collect:
-
+  scrape:
     runs-on: ubuntu-latest
-
-
     steps:
-
-    - name: Checkout
-      uses: actions/checkout@v4
-
-
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 22
-
-
-    - name: Install packages
-      run: npm install
-
-
-    - name: Install Chromium
-      run: npx playwright install chromium
-
-
-    - name: Run collector
-      run: npm run collect
-
-
-    - name: Upload JSON
-      uses: actions/upload-artifact@v4
-      with:
-
-        name: option-chain-json
-
-        path: option-chain.json
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm install puppeteer
+      - run: node scrape.js
