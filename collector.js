@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const url =
-"https://stockdata.rupeezy.in/flow/api/v1/stock/optionchain?symbol=NIFTY&InstrumentType=nfo&ExpiryDate=20260804&AddGreek=true";
+"https://www.tick2trade.com/option-chain/${sym}";
 
 const browser = await chromium.launch({
     headless: true
