@@ -16,9 +16,9 @@ async function scrapeTick2Trade(symbol) {
     return rows.map(row => {
       const cells = row.querySelectorAll("td");
       return {
-        strike: cells[0]?.innerText.trim(),
-        callOI: cells[1]?.innerText.trim(),
-        putOI: cells[2]?.innerText.trim()
+        oi: cells[0]?.innerText.trim(),
+        changeInCcallOI: cells[1]?.innerText.trim(),
+        volume: cells[2]?.innerText.trim()
       };
     });
   });
