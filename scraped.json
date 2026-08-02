@@ -1,206 +1,62 @@
 {
-  "sensex": [
-    {
-      "oi": "5.6K",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "5.7K",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "8.0K",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "14.6K",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "1.35L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "53.1K",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "84.5K",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "1.14L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "1.62L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "6.30L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "3.35L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "3.22L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "3.40L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "2.16L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "4.98L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "2.67L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "1.22L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "1.36L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "71.4K",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "5.75L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    }
-  ],
-  "nifty": [
-    {
-      "oi": "1.07L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "6.02L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "2.25L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "22.23L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "2.48L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "12.52L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "5.59L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "33.37L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "17.01L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "50.01L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "39.92L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "83.28L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "44.91L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "90.80L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "32.00L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "120.35L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "52.45L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "91.97L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "38.98L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    },
-    {
-      "oi": "68.30L",
-      "changeInCcallOI": "+0",
-      "volume": "0"
-    }
-  ]
+  "sensex": {
+    "spot": "78,094.64",
+    "atm": "78,100",
+    "maxPain": "78,000",
+    "pcrOI": "1.20",
+    "highestCallOI": "78,000",
+    "highestPutOI": "78,000",
+    "atmStraddle": "792.75",
+    "highestCallChangeOI": "77,100",
+    "highestPutChangeOI": "77,100",
+    "ivx": "13.75%"
+  },
+  "nifty": {
+    "spot": "24,383.60",
+    "atm": "24,350",
+    "maxPain": "24,350",
+    "pcrOI": "1.49",
+    "highestCallOI": "24,600",
+    "highestPutOI": "24,000",
+    "atmStraddle": "168.65",
+    "highestCallChangeOI": "23,850",
+    "highestPutChangeOI": "23,850",
+    "ivx": "13.50%"
+  },
+  "banknifty": {
+    "spot": "60,222.70",
+    "atm": "57,400",
+    "maxPain": "57,400",
+    "pcrOI": "0.86",
+    "highestCallOI": "58,000",
+    "highestPutOI": "58,000",
+    "atmStraddle": "1,503.55",
+    "highestCallChangeOI": "57,000",
+    "highestPutChangeOI": "56,400",
+    "ivx": "14.75%"
+  },
+  "reliance": {
+    "spot": "1,609.30",
+    "atm": "1,310",
+    "maxPain": "1,300",
+    "pcrOI": "0.86",
+    "highestCallOI": "1,300",
+    "highestPutOI": "1,300",
+    "atmStraddle": "25.35",
+    "highestCallChangeOI": "1,400",
+    "highestPutChangeOI": "1,300",
+    "ivx": "19.34%"
+  },
+  "tcs": {
+    "spot": "2,882.50",
+    "atm": "2,380",
+    "maxPain": "2,400",
+    "pcrOI": "0.87",
+    "highestCallOI": "2,500",
+    "highestPutOI": "2,300",
+    "atmStraddle": "132.80",
+    "highestCallChangeOI": "2,180",
+    "highestPutChangeOI": "2,180",
+    "ivx": "29.60%"
+  }
 }
