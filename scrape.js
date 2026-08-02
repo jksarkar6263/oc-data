@@ -5,6 +5,13 @@ import symbolMap from "./symbolMap.json" assert { type: "json" };
 
 puppeteer.use(StealthPlugin());
 
+// rotate between multiple user agents
+const userAgents = [
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
+];
+
 async function scrapeTick2Trade() {
   const browser = await puppeteer.launch({
     headless: true,
@@ -32,12 +39,26 @@ async function scrapeSymbol(page, code, slug, allResults) {
   const url = `https://www.tick2trade.com/option-chain/${slug}`;
   console.log(`Opening ${code} (${url})...`);
 
-  await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-    "AppleWebKit/537.36 (KHTML, like Gecko) " +
-    "Chrome/114.0.0.0 Safari/537.36");
+  // randomize UA each run
+  const ua = userAgents[Math.floor(Math.random() * userAgents.length)];
+  await page.setUserAgent(ua);
   await page.setViewport({ width: 1280, height: 800 });
 
-  await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
+  // retry logic around navigation
+  try {
+    await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
+  } catch (err) {
+    console.warn(`First attempt failed for ${code}, retrying...`);
+    try {
+      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+    } catch (err2) {
+      console.error(`Navigation failed for ${code}: ${err2.message}`);
+      return;
+    }
+  }
+
+  // small delay to let scripts settle
+  await page.waitForTimeout(1500);
 
   try {
     await page.waitForSelector('select[data-testid="oc-expiry-select"]', { timeout: 30000 });
@@ -55,7 +76,16 @@ async function scrapeSymbol(page, code, slug, allResults) {
   for (const exp of expiries) {
     console.log(`Scraping ${code} / ${exp.text}`);
     await page.select('select[data-testid="oc-expiry-select"]', exp.value);
-    await page.waitForSelector('[data-testid="h-spot"] div.mt-1', { timeout: 30000 });
+
+    // wait a bit after selecting expiry
+    await page.waitForTimeout(1000);
+
+    try {
+      await page.waitForSelector('[data-testid="h-spot"] div.mt-1', { timeout: 30000 });
+    } catch {
+      console.error(`Spot data not found for ${code} / ${exp.text}`);
+      continue;
+    }
 
     const summary = await page.evaluate(() => {
       function getText(sel) {
