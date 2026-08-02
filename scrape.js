@@ -8,10 +8,13 @@ async function scrapeTick2Trade() {
   });
   const page = await browser.newPage();
 
-  // Always start from the generic page
+  // Always start from the generic option-chain page
   await page.goto("https://www.tick2trade.com/option-chain", { waitUntil: "networkidle2" });
 
-  // Get all symbols from the symbol dropdown
+  // Wait for symbol dropdown to appear
+  await page.waitForSelector('select[data-testid="oc-symbol-select"]', { timeout: 15000 });
+
+  // Get all symbols
   const symbols = await page.evaluate(() => {
     return Array.from(document.querySelectorAll('select[data-testid="oc-symbol-select"] option'))
       .map(opt => ({ value: opt.value, text: opt.innerText.trim() }));
@@ -20,11 +23,12 @@ async function scrapeTick2Trade() {
   const allResults = {};
 
   for (const sym of symbols) {
-    console.log(`Scraping ${sym.text}...`);
-
-    // Select symbol
+    console.log(`Selecting symbol: ${sym.text}`);
     await page.select('select[data-testid="oc-symbol-select"]', sym.value);
     await new Promise(r => setTimeout(r, 2000));
+
+    // Wait for expiry dropdown
+    await page.waitForSelector('select[data-testid="oc-expiry-select"]', { timeout: 15000 });
 
     // Get all expiries for this symbol
     const expiries = await page.evaluate(() => {
@@ -35,11 +39,13 @@ async function scrapeTick2Trade() {
     const results = {};
 
     for (const exp of expiries) {
-      // Select expiry
+      console.log(`Scraping ${sym.text} / ${exp.text}`);
       await page.select('select[data-testid="oc-expiry-select"]', exp.value);
       await new Promise(r => setTimeout(r, 2000));
 
-      // Scrape summary metrics
+      // Wait for summary metrics to appear
+      await page.waitForSelector('[data-testid="h-spot"] div.mt-1', { timeout: 15000 });
+
       const summary = await page.evaluate(() => {
         function getText(sel) {
           const el = document.querySelector(sel);
@@ -59,6 +65,7 @@ async function scrapeTick2Trade() {
         };
       });
 
+      console.log(`Got data for ${sym.text} / ${exp.text}:`, summary);
       results[exp.text] = summary;
     }
 
