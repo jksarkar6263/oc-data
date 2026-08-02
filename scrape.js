@@ -1,44 +1,31 @@
 import puppeteer from "puppeteer";
 import fs from "fs";
 
-// Convert dd-mm-yyyy into Tick2Trade dropdown format (dd mmm or mmm)
-function formatExpiryForSite(dateStr) {
-  const [dd, mm, yyyy] = dateStr.split("-");
-  const months = [
-    "Jan","Feb","Mar","Apr","May","Jun",
-    "Jul","Aug","Sep","Oct","Nov","Dec"
-  ];
-  const monthName = months[parseInt(mm, 10) - 1];
-
-  // Weekly expiry (dd present)
-  if (dd && dd !== "00") {
-    return `${dd} ${monthName}`;
-  }
-  // Monthly expiry (only month)
-  return monthName;
-}
-
-async function scrapeTick2Trade(symbol, expiries) {
+async function scrapeTick2Trade(symbol) {
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
   });
   const page = await browser.newPage();
 
-  const url = `https://www.tick2trade.com/option-chain/${symbol}`;
-  await page.goto(url, { waitUntil: "networkidle2" });
+  await page.goto("https://www.tick2trade.com/option-chain", { waitUntil: "networkidle2" });
+
+  // Select the symbol
+  await page.select('select[data-testid="oc-symbol-select"]', symbol);
+  await new Promise(r => setTimeout(r, 2000));
+
+  // Get all expiry options (value + text)
+  const expiries = await page.evaluate(() => {
+    return Array.from(document.querySelectorAll('select[data-testid="oc-expiry-select"] option'))
+      .map(opt => ({ value: opt.value, text: opt.innerText.trim() }));
+  });
 
   const results = {};
 
   for (const exp of expiries) {
-    const siteExp = formatExpiryForSite(exp);
-
-    // Select symbol in dropdown (if needed)
-    await page.select("#symbol-dropdown", symbol); // adjust selector
-
-    // Select expiry in dropdown
-    await page.select("#expiry-dropdown", siteExp); // adjust selector
-    await new Promise(r => setTimeout(r, 2000));   // wait for refresh
+    // Select expiry by value
+    await page.select('select[data-testid="oc-expiry-select"]', exp.value);
+    await new Promise(r => setTimeout(r, 2000));
 
     const summary = await page.evaluate(() => {
       function getText(selector) {
@@ -59,7 +46,8 @@ async function scrapeTick2Trade(symbol, expiries) {
       };
     });
 
-    results[exp] = summary; // keep your dd-mm-yyyy format
+    // Store keyed by expiry text (e.g. "06 Aug", "13 Aug")
+    results[exp.text] = summary;
   }
 
   await browser.close();
@@ -67,19 +55,13 @@ async function scrapeTick2Trade(symbol, expiries) {
 }
 
 async function main() {
-  // Define your symbols and expiry dates in dd-mm-yyyy format
-  const expiriesMap = {
-    sensex: ["06-08-2026", "13-08-2026", "20-08-2026", "27-08-2026", "03-09-2026"],
-    nifty: ["04-08-2026", "11-08-2026", "18-08-2026", "25-08-2026", "01-09-2026"],
-    banknifty: ["25-08-2026", "29-09-2026"],
-    reliance: ["25-08-2026", "29-09-2026"], 
-    tcs: ["25-08-2026", "29-09-2026"]
-  };
-
+  // Use the option values from the symbol dropdown (like "sensex", "nifty", "reliance")
+  const symbols = ["sensex", "nifty", "banknifty", "reliance", "tcs"];
   const allResults = {};
-  for (const sym of Object.keys(expiriesMap)) {
+
+  for (const sym of symbols) {
     console.log(`Scraping ${sym}...`);
-    allResults[sym] = await scrapeTick2Trade(sym, expiriesMap[sym]);
+    allResults[sym] = await scrapeTick2Trade(sym);
   }
 
   fs.writeFileSync("scraped.json", JSON.stringify(allResults, null, 2));
