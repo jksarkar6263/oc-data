@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 import fs from "fs";
 
-// Convert dd-mm-yyyy into Tick2Trade format (dd mmm or mmm)
+// Convert dd-mm-yyyy into Tick2Trade dropdown format (dd mmm or mmm)
 function formatExpiryForSite(dateStr) {
   const [dd, mm, yyyy] = dateStr.split("-");
   const months = [
@@ -10,11 +10,11 @@ function formatExpiryForSite(dateStr) {
   ];
   const monthName = months[parseInt(mm, 10) - 1];
 
-  // If day is provided (weekly expiry)
-  if (dd && dd.length === 2) {
+  // Weekly expiry (dd present)
+  if (dd && dd !== "00") {
     return `${dd} ${monthName}`;
   }
-  // If only month (monthly expiry)
+  // Monthly expiry (only month)
   return monthName;
 }
 
@@ -33,9 +33,12 @@ async function scrapeTick2Trade(symbol, expiries) {
   for (const exp of expiries) {
     const siteExp = formatExpiryForSite(exp);
 
-    // Select expiry from dropdown
-    await page.select("select", siteExp); // adjust selector to actual expiry dropdown
-    await page.waitForTimeout(2000);      // wait for refresh
+    // Select symbol in dropdown (if needed)
+    await page.select("#symbol-dropdown", symbol); // adjust selector
+
+    // Select expiry in dropdown
+    await page.select("#expiry-dropdown", siteExp); // adjust selector
+    await new Promise(r => setTimeout(r, 2000));   // wait for refresh
 
     const summary = await page.evaluate(() => {
       function getText(selector) {
@@ -56,8 +59,7 @@ async function scrapeTick2Trade(symbol, expiries) {
       };
     });
 
-    // Store keyed by your original dd-mm-yyyy format
-    results[exp] = summary;
+    results[exp] = summary; // keep your dd-mm-yyyy format
   }
 
   await browser.close();
@@ -66,17 +68,16 @@ async function scrapeTick2Trade(symbol, expiries) {
 
 async function main() {
   // Define your symbols and expiry dates in dd-mm-yyyy format
-  const symbols = ["sensex", "nifty", "banknifty", "reliance", "tcs"];
   const expiriesMap = {
     sensex: ["06-08-2026", "13-08-2026", "20-08-2026", "27-08-2026", "03-09-2026"],
     nifty: ["04-08-2026", "11-08-2026", "18-08-2026", "25-08-2026", "01-09-2026"],
     banknifty: ["25-08-2026", "29-09-2026"],
-    reliance: ["25-08-2026", "29-09-2026"], // example
-    tcs: ["25-08-2026", "29-09-2026"]       // example
+    reliance: ["25-08-2026", "29-09-2026"], 
+    tcs: ["25-08-2026", "29-09-2026"]
   };
 
   const allResults = {};
-  for (const sym of symbols) {
+  for (const sym of Object.keys(expiriesMap)) {
     console.log(`Scraping ${sym}...`);
     allResults[sym] = await scrapeTick2Trade(sym, expiriesMap[sym]);
   }
