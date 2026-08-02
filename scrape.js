@@ -1,39 +1,13 @@
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import fs from "fs";
-import symbolMap from "./symbolMap.json" assert { type: "json" };
-
-puppeteer.use(StealthPlugin());
-
-async function scrapeTick2Trade() {
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"]
-  });
-  const page = await browser.newPage();
-
-  const allResults = {};
-
-  // Loop indices
-  for (const [code, slug] of Object.entries(symbolMap.indices)) {
-    if (!slug) continue;
-    await scrapeSymbol(page, code, slug, allResults);
-  }
-
-  // Loop stocks
-  for (const [code, slug] of Object.entries(symbolMap.stocks)) {
-    if (!slug) continue; // skip if slug not filled yet
-    await scrapeSymbol(page, code, slug, allResults);
-  }
-
-  await browser.close();
-  return allResults;
-}
-
 async function scrapeSymbol(page, code, slug, allResults) {
   const url = `https://www.tick2trade.com/option-chain/${slug}`;
   console.log(`Opening ${code} (${url})...`);
-  await page.goto(url, { waitUntil: "domcontentloaded" });
+
+  await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+    "AppleWebKit/537.36 (KHTML, like Gecko) " +
+    "Chrome/114.0.0.0 Safari/537.36");
+  await page.setViewport({ width: 1280, height: 800 });
+
+  await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
 
   try {
     await page.waitForSelector('select[data-testid="oc-expiry-select"]', { timeout: 30000 });
@@ -77,11 +51,3 @@ async function scrapeSymbol(page, code, slug, allResults) {
 
   allResults[code] = results;
 }
-
-async function main() {
-  const data = await scrapeTick2Trade();
-  fs.writeFileSync("scraped.json", JSON.stringify(data, null, 2));
-  console.log("Scraping complete. Results saved to scraped.json");
-}
-
-main();
