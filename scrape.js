@@ -8,11 +8,11 @@ async function scrapeTick2Trade() {
   });
   const page = await browser.newPage();
 
-  // Always start from the generic option-chain page
-  await page.goto("https://www.tick2trade.com/option-chain", { waitUntil: "networkidle2" });
+  // Go to the generic option-chain page (not /sensex)
+  await page.goto("https://www.tick2trade.com/option-chain", { waitUntil: "domcontentloaded" });
 
-  // Wait for symbol dropdown to appear
-  await page.waitForSelector('select[data-testid="oc-symbol-select"]', { timeout: 15000 });
+  // Wait for the symbol dropdown
+  await page.waitForSelector('select[data-testid="oc-symbol-select"]', { timeout: 30000 });
 
   // Get all symbols
   const symbols = await page.evaluate(() => {
@@ -22,13 +22,10 @@ async function scrapeTick2Trade() {
 
   const allResults = {};
 
-  for (const sym of symbols) {
+  for (const sym of symbols.slice(0, 5)) { // limit to first 5 for testing
     console.log(`Selecting symbol: ${sym.text}`);
     await page.select('select[data-testid="oc-symbol-select"]', sym.value);
-    await new Promise(r => setTimeout(r, 2000));
-
-    // Wait for expiry dropdown
-    await page.waitForSelector('select[data-testid="oc-expiry-select"]', { timeout: 15000 });
+    await page.waitForSelector('select[data-testid="oc-expiry-select"]', { timeout: 30000 });
 
     // Get all expiries for this symbol
     const expiries = await page.evaluate(() => {
@@ -41,10 +38,9 @@ async function scrapeTick2Trade() {
     for (const exp of expiries) {
       console.log(`Scraping ${sym.text} / ${exp.text}`);
       await page.select('select[data-testid="oc-expiry-select"]', exp.value);
-      await new Promise(r => setTimeout(r, 2000));
 
       // Wait for summary metrics to appear
-      await page.waitForSelector('[data-testid="h-spot"] div.mt-1', { timeout: 15000 });
+      await page.waitForSelector('[data-testid="h-spot"] div.mt-1', { timeout: 30000 });
 
       const summary = await page.evaluate(() => {
         function getText(sel) {
