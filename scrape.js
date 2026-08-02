@@ -1,3 +1,33 @@
+import puppeteer from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+import fs from "fs";
+import symbolMap from "./symbolMap.json" assert { type: "json" };
+
+puppeteer.use(StealthPlugin());
+
+async function scrapeTick2Trade() {
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+  });
+  const page = await browser.newPage();
+
+  const allResults = {};
+
+  for (const [code, slug] of Object.entries(symbolMap.indices)) {
+    if (!slug) continue;
+    await scrapeSymbol(page, code, slug, allResults);
+  }
+
+  for (const [code, slug] of Object.entries(symbolMap.stocks)) {
+    if (!slug) continue;
+    await scrapeSymbol(page, code, slug, allResults);
+  }
+
+  await browser.close();
+  return allResults;
+}
+
 async function scrapeSymbol(page, code, slug, allResults) {
   const url = `https://www.tick2trade.com/option-chain/${slug}`;
   console.log(`Opening ${code} (${url})...`);
@@ -51,3 +81,11 @@ async function scrapeSymbol(page, code, slug, allResults) {
 
   allResults[code] = results;
 }
+
+async function main() {
+  const data = await scrapeTick2Trade();
+  fs.writeFileSync("scraped.json", JSON.stringify(data, null, 2));
+  console.log("Scraping complete. Results saved to scraped.json");
+}
+
+main();
