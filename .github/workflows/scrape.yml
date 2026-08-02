@@ -1,9 +1,9 @@
 name: Scrape Tick2Trade
 
 on:
+  workflow_dispatch:   # manual trigger
   schedule:
-    - cron: "0 6 * * *"   # every day at 6 AM UTC
-  workflow_dispatch:       # allow manual runs
+    - cron: "0 6 * * *"   # daily at 6 AM UTC
 
 jobs:
   scrape:
@@ -20,6 +20,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Generate slug map
+        run: node slug.js
+
       - name: Run scraper
         run: npm start
 
@@ -27,6 +30,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add scraped.json
-          git commit -m "Update scraped data"
+          git add symbolMap.json scraped.json
+          git commit -m "Update slugs and scraped data"
           git push
