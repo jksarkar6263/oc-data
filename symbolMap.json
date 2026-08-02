@@ -2,10 +2,10 @@
   "indices": {
     "NIFTY": "Nifty 50",
     "BANKNIFTY": "Nifty Bank",
-    "BANKEX": "BANKEX",
+    "BANKEX": "Bankex",
     "FINNIFTY": "Nifty Fin Service",
     "MIDCPNIFTY": "",
-    "SENSEX": "SENSEX"
+    "SENSEX": "Sensex"
   },
   "stocks": {
     "360ONE": "",
@@ -32,7 +32,7 @@
     "BAJAJFINSV": "",
     "BAJAJHLDNG": "",
     "BAJFINANCE": "",
-    "BANDHANBNK": "BANDHAN BANK",
+    "BANDHANBNK": "Bandhan Bank",
     "BANKBARODA": "BANK OF BARODA",
     "BANKINDIA": "BANK OF INDIA",
     "BDL": "",
