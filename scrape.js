@@ -14,7 +14,7 @@ const userAgents = [
 
 async function scrapeTick2Trade() {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
   });
   const page = await browser.newPage();
