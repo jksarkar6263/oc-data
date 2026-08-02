@@ -1,52 +1,36 @@
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import fs from "fs";
 
-async function scrapeTick2Trade() {
+puppeteer.use(StealthPlugin());
+
+async function scrapeTick2Trade(symbols) {
   const browser = await puppeteer.launch({
     headless: true,
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
-      "--disable-blink-features=AutomationControlled",
       "--disable-dev-shm-usage",
+      "--disable-blink-features=AutomationControlled",
       "--disable-gpu",
       "--window-size=1920,1080"
     ]
   });
   const page = await browser.newPage();
 
-  // Go to the generic option-chain page
-  await page.goto("https://www.tick2trade.com/option-chain", { waitUntil: "domcontentloaded" });
-
-  // Debug: dump first 1000 chars of HTML so you can see what CI actually loads
-  const html = await page.content();
-  console.log("Page content preview:\n", html.slice(0, 1000));
-
-  // Try to wait for the symbol dropdown
-  try {
-    await page.waitForSelector('select[data-testid="oc-symbol-select"]', { timeout: 30000 });
-  } catch (err) {
-    console.error("Symbol dropdown not found. Page may be serving different HTML in CI.");
-    await browser.close();
-    return {};
-  }
-
-  // Get all symbols
-  const symbols = await page.evaluate(() => {
-    return Array.from(document.querySelectorAll('select[data-testid="oc-symbol-select"] option'))
-      .map(opt => ({ value: opt.value, text: opt.innerText.trim() }));
-  });
-
-  console.log("Found symbols:", symbols.map(s => s.text).slice(0, 10));
-
   const allResults = {};
 
-  for (const sym of symbols.slice(0, 5)) { // limit to 5 for testing
-    console.log(`Selecting symbol: ${sym.text}`);
-    await page.select('select[data-testid="oc-symbol-select"]', sym.value);
-    await page.waitForSelector('select[data-testid="oc-expiry-select"]', { timeout: 30000 });
+  for (const sym of symbols) {
+    console.log(`Opening ${sym}...`);
+    await page.goto(`https://www.tick2trade.com/option-chain/${sym}`, { waitUntil: "domcontentloaded" });
 
-    // Get all expiries
+    try {
+      await page.waitForSelector('select[data-testid="oc-expiry-select"]', { timeout: 30000 });
+    } catch {
+      console.error(`Expiry dropdown not found for ${sym}`);
+      continue;
+    }
+
     const expiries = await page.evaluate(() => {
       return Array.from(document.querySelectorAll('select[data-testid="oc-expiry-select"] option'))
         .map(opt => ({ value: opt.value, text: opt.innerText.trim() }));
@@ -55,10 +39,8 @@ async function scrapeTick2Trade() {
     const results = {};
 
     for (const exp of expiries) {
-      console.log(`Scraping ${sym.text} / ${exp.text}`);
+      console.log(`Scraping ${sym} / ${exp.text}`);
       await page.select('select[data-testid="oc-expiry-select"]', exp.value);
-
-      // Wait for summary metrics
       await page.waitForSelector('[data-testid="h-spot"] div.mt-1', { timeout: 30000 });
 
       const summary = await page.evaluate(() => {
@@ -80,11 +62,10 @@ async function scrapeTick2Trade() {
         };
       });
 
-      console.log(`Got data for ${sym.text} / ${exp.text}:`, summary);
       results[exp.text] = summary;
     }
 
-    allResults[sym.text] = results;
+    allResults[sym] = results;
   }
 
   await browser.close();
@@ -92,7 +73,10 @@ async function scrapeTick2Trade() {
 }
 
 async function main() {
-  const data = await scrapeTick2Trade();
+  // Provide your full FNO index + stock codes here
+  const symbols = ["sensex", "nifty", "banknifty", "reliance-industries"];
+
+  const data = await scrapeTick2Trade(symbols);
   fs.writeFileSync("scraped.json", JSON.stringify(data, null, 2));
   console.log("Scraping complete. Results saved to scraped.json");
 }
