@@ -1,7 +1,7 @@
 {
   "indices": {
     "NIFTY": "Nifty 50",
-    "BANKNIFTY": "banknifty",
+    "BANKNIFTY": "Banknifty",
     "BANKEX": "bankex",
     "FINNIFTY": "finnifty",
     "MIDCPNIFTY": "midcpnifty",
