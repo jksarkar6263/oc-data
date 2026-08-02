@@ -1,0 +1,18 @@
+{
+  "indices": {
+    "NIFTY": "nifty-50",
+    "BANKNIFTY": "bank-nifty",
+    "FINNIFTY": "finnifty",
+    "MIDCPNIFTY": "midcap-nifty",
+    "SENSEX": "sensex"
+  },
+  "stocks": {
+    "RELIANCE": "reliance-industries",
+    "ADANIENT": "adani-enterprises",
+    "AXISBANK": "axis-bank",
+    "HDFCBANK": "hdfc-bank",
+    "INFY": "infosys",
+    "TCS": "tata-consultancy-services"
+    // … extend with all your FNO codes
+  }
+}
