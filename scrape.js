@@ -55,8 +55,8 @@ async function scrapeTick2Trade(symbol) {
 }
 
 async function main() {
-  // Use the option values from the symbol dropdown (like "sensex", "nifty", "reliance")
-  const symbols = ["sensex", "nifty", "banknifty", "reliance", "tcs"];
+  // Use the option values from the symbol dropdown (like "sensex", "nifty", "reliance-industries")
+  const symbols = ["sensex", "nifty", "banknifty", "reliance-industries", "tata-steel"];
   const allResults = {};
 
   for (const sym of symbols) {
