@@ -11,16 +11,26 @@ async function scrapeTick2Trade(symbol) {
   const url = `https://www.tick2trade.com/option-chain/${symbol}`;
   await page.goto(url, { waitUntil: "networkidle2" });
 
-  const data = await page.evaluate(() => {
-    const rows = Array.from(document.querySelectorAll("table tbody tr"));
-    return rows.map(row => {
-      const cells = row.querySelectorAll("td");
-      return {
-        oi: cells[0]?.innerText.trim(),
-        changeInCcallOI: cells[1]?.innerText.trim(),
-        volume: cells[2]?.innerText.trim()
-      };
-    });
+  const summary = await page.evaluate(() => {
+  function getText(selector) {
+    const el = document.querySelector(selector);
+    return el ? el.innerText.trim() : null;
+  }
+
+  return {
+    spot: getText("h-spot"),          // adjust selector
+    atm: getText("h-atm"),            // adjust selector
+    maxPain: getText("h-max-pain"),   // adjust selector
+    pcrOI: getText("h-pcr"),          // adjust selector
+    highestCallOI: getText("h-hc-oi"),
+    highestPutOI: getText("h-hp-oi"),
+    atmStraddle: getText("h-straddle"),
+    highestCallChangeOI: getText("h-hc-chg"),
+    highestPutChangeOI: getText("h-hp-chg"),
+    ivx: getText("h-ivx")
+  };
+});
+
   });
 
   await browser.close();
