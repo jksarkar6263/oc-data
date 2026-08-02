@@ -11,41 +11,43 @@ async function scrapeTick2Trade(symbol) {
   const url = `https://www.tick2trade.com/option-chain/${symbol}`;
   await page.goto(url, { waitUntil: "networkidle2" });
 
+  // Extract summary metrics above the table
   const summary = await page.evaluate(() => {
-  function getText(selector) {
-    const el = document.querySelector(selector);
-    return el ? el.innerText.trim() : null;
-  }
+    function getText(selector) {
+      const el = document.querySelector(selector);
+      return el ? el.innerText.trim() : null;
+    }
 
-  return {
-    spot: getText("h-spot"),          // adjust selector
-    atm: getText("h-atm"),            // adjust selector
-    maxPain: getText("h-max-pain"),   // adjust selector
-    pcrOI: getText("h-pcr"),          // adjust selector
-    highestCallOI: getText("h-hc-oi"),
-    highestPutOI: getText("h-hp-oi"),
-    atmStraddle: getText("h-straddle"),
-    highestCallChangeOI: getText("h-hc-chg"),
-    highestPutChangeOI: getText("h-hp-chg"),
-    ivx: getText("h-ivx")
-  };
-});
-
+    return {
+      spot: getText('[data-testid="h-spot"] div.mt-1'),
+      atm: getText('[data-testid="h-atm"] div.mt-1'),
+      maxPain: getText('[data-testid="h-max-pain"] div.mt-1'),
+      pcrOI: getText('[data-testid="h-pcr"] div.mt-1'),
+      highestCallOI: getText('[data-testid="h-hc-oi"] div.mt-1'),
+      highestPutOI: getText('[data-testid="h-hp-oi"] div.mt-1'),
+      atmStraddle: getText('[data-testid="h-straddle"] div.mt-1'),
+      highestCallChangeOI: getText('[data-testid="h-hc-chg"] div.mt-1'),
+      highestPutChangeOI: getText('[data-testid="h-hp-chg"] div.mt-1'),
+      ivx: getText('[data-testid="h-ivx"] div.mt-1')
+    };
   });
 
   await browser.close();
-  return data;
+  return summary;
 }
 
 async function main() {
-  const symbols = ["sensex", "nifty"];
+  // Add all indices and F&O stock codes you want here
+  const symbols = ["sensex", "nifty", "banknifty", "reliance", "tcs"];
   const results = {};
 
   for (const sym of symbols) {
+    console.log(`Scraping ${sym}...`);
     results[sym] = await scrapeTick2Trade(sym);
   }
 
   fs.writeFileSync("scraped.json", JSON.stringify(results, null, 2));
+  console.log("Scraping complete. Results saved to scraped.json");
 }
 
 main();
